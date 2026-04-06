@@ -1,6 +1,7 @@
 import os
 import fitz  # PyMuPDF
 import chromadb
+from utils.security import ROOT_DIR
 from chromadb import Documents, EmbeddingFunction, Embeddings
 import ollama
 
@@ -24,7 +25,7 @@ class OllamaEmbeddingFunction(EmbeddingFunction):
         return embeddings
 
 class VectorStoreManager:
-    def __init__(self, db_path="D:/Repos/RESRAG/vector_store/chroma_db"):
+    def __init__(self, db_path=str(ROOT_DIR / "vector_store" / "chroma_db")):
         self.client = chromadb.PersistentClient(path=db_path)
         self.embedding_fn = OllamaEmbeddingFunction()
         

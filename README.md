@@ -10,6 +10,7 @@ The application uses Streamlit for its user interface, allowing users to upload 
 *   **Enhanced Vector Search for Technical Context:**
     *   **Custom Embedding Context Window:** Integrates natively with Ollama, specifically expanding the context window (`num_ctx: 8192`) for the `nomic-embed-text` model to prevent token overflow and ensure optimal ingestion of large, dense technical documents.
     *   **Optimized Chunking Algorithm:** Custom text chunking strategy tailored for dense XML, system paths, and tabular data common in software documentation (`vector_store/chroma_manager.py`), ensuring that critical structure is maintained during ingestion.
+*   **Dynamic Project Root Resolution:** Uses `pathlib` for dynamic path resolution (`utils/security.py`), making the project entirely portable and avoiding any hard-coded absolute directories.
 *   **Enterprise-Grade Security Sandbox:** Features rigorous path traversal protections (`utils/security.py`) to restrict file operations rigidly to the project root directory, ensuring safe execution even with untrusted file uploads.
 *   **Fully Local & Private Execution:** All documents, models, and embeddings run locally. No data leaves your machine.
 
