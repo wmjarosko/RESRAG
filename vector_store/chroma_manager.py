@@ -4,6 +4,7 @@ import chromadb
 from chromadb import Documents, EmbeddingFunction, Embeddings
 import ollama
 
+
 class OllamaEmbeddingFunction(EmbeddingFunction):
     """Custom embedding function to use Ollama natively with ChromaDB."""
     def __init__(self, model_name="nomic-embed-text"):
@@ -34,6 +35,7 @@ class VectorStoreManager:
         )
 
     def extract_text_from_pdf(self, pdf_path):
+        from utils.security import enforce_safe_path
         """Extracts text from a PDF using PyMuPDF."""
         doc = fitz.open(pdf_path)
         text = ""

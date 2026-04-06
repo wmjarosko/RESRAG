@@ -5,6 +5,9 @@ from orchestrator import RAGOrchestrator
 from vector_store.chroma_manager import VectorStoreManager
 from utils.doc_parser import DocumentParser
 
+JAIL_TEMP_DIR = "D:/Repos/RESRAG/temp_uploads"
+os.makedirs(JAIL_TEMP_DIR, exist_ok=True)
+
 st.set_page_config(page_title="Local Multi-Agent RAG Resume Evaluator", layout="wide")
 st.title("Resume RAG Evaluator")
 
@@ -41,7 +44,7 @@ if st.sidebar.button("Ingest to ChromaDB"):
             status_text.text(f"Processing {uploaded_pdf.name} ({index + 1}/{total_files})...")
             
             # Save uploaded file temporarily to process with PyMuPDF
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            with tempfile.NamedTemporaryFile(dir=JAIL_TEMP_DIR, delete=False, suffix=".pdf") as tmp_file:
                 tmp_file.write(uploaded_pdf.read())
                 tmp_path = tmp_file.name
             
@@ -72,7 +75,7 @@ with col1:
     resume_text = ""
     if uploaded_resume is not None:
         # Save temp file to parse it
-        with tempfile.NamedTemporaryFile(delete=False, suffix=f".{uploaded_resume.name.split('.')[-1]}") as tmp_file:
+        with tempfile.NamedTemporaryFile(dir=JAIL_TEMP_DIR, delete=False, suffix=f".{uploaded_resume.name.split('.')[-1]}") as tmp_file:
             tmp_file.write(uploaded_resume.read())
             tmp_path = tmp_file.name
         

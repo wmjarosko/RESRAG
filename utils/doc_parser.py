@@ -1,5 +1,6 @@
 import fitz  # PyMuPDF
 import docx  # python-docx
+from utils.security import enforce_safe_path
 
 class DocumentParser:
     @staticmethod
