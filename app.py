@@ -4,8 +4,9 @@ import tempfile
 from orchestrator import RAGOrchestrator
 from vector_store.chroma_manager import VectorStoreManager
 from utils.doc_parser import DocumentParser
+from utils.security import ROOT_DIR
 
-JAIL_TEMP_DIR = "D:/Repos/RESRAG/temp_uploads"
+JAIL_TEMP_DIR = str(ROOT_DIR / "temp_uploads")
 os.makedirs(JAIL_TEMP_DIR, exist_ok=True)
 
 st.set_page_config(page_title="Local Multi-Agent RAG Resume Evaluator", layout="wide")
