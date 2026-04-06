@@ -1,0 +1,6 @@
+streamlit
+chromadb
+PyMuPDF
+ollama
+pydantic
+python-docx
