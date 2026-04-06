@@ -4,6 +4,15 @@ RESRAG is a Local Multi-Agent Retrieval-Augmented Generation (RAG) system design
 
 The application uses Streamlit for its user interface, allowing users to upload technical PDFs (Silo A), candidate resumes (Silo B), and paste job descriptions (Silo C) to run a comprehensive multi-agent evaluation.
 
+## Key Features & Code Optimizations
+
+*   **Advanced Document Parsing:** Robust support for extracting text from PDF, DOCX, TXT, and Markdown files (`utils/doc_parser.py`).
+*   **Enhanced Vector Search for Technical Context:**
+    *   **Custom Embedding Context Window:** Integrates natively with Ollama, specifically expanding the context window (`num_ctx: 8192`) for the `nomic-embed-text` model to prevent token overflow and ensure optimal ingestion of large, dense technical documents.
+    *   **Optimized Chunking Algorithm:** Custom text chunking strategy tailored for dense XML, system paths, and tabular data common in software documentation (`vector_store/chroma_manager.py`), ensuring that critical structure is maintained during ingestion.
+*   **Enterprise-Grade Security Sandbox:** Features rigorous path traversal protections (`utils/security.py`) to restrict file operations rigidly to the project root directory, ensuring safe execution even with untrusted file uploads.
+*   **Fully Local & Private Execution:** All documents, models, and embeddings run locally. No data leaves your machine.
+
 ## Agents Involved
 
 The system orchestrates three distinct AI agents to perform the evaluation:
