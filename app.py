@@ -12,6 +12,20 @@ os.makedirs(JAIL_TEMP_DIR, exist_ok=True)
 st.set_page_config(page_title="Local Multi-Agent RAG Resume Evaluator", layout="wide")
 st.title("Resume RAG Evaluator")
 
+
+st.markdown("""
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stDeployButton {display:none;}
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Initialize backend classes
 @st.cache_resource
 def get_orchestrator():
@@ -25,7 +39,8 @@ orchestrator = get_orchestrator()
 db_manager = get_db_manager()
 
 # --- Sidebar: Vector Database Management ---
-st.sidebar.header("Silo A: Technical Docs")
+st.sidebar.header("📚 Silo A: Technical Docs")
+st.sidebar.markdown("Upload architecture diagrams, standard operating procedures, and other technical documentation your candidate should be familiar with.")
 
 # Updated to accept multiple files
 uploaded_pdfs = st.sidebar.file_uploader(
@@ -62,12 +77,13 @@ if st.sidebar.button("Ingest to ChromaDB"):
         st.sidebar.warning("Please upload at least one PDF.")
 
 # --- Main Area: Evaluation Pipeline ---
-st.header("Evaluation Pipeline")
+st.header("⚙️ Evaluation Pipeline")
+st.markdown("Provide the candidate's resume and the job description to run a multi-agent evaluation against the technical documentation in Silo A.")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Silo B: Candidate Resume")
+    st.subheader("📄 Silo B: Candidate Resume")
     uploaded_resume = st.file_uploader(
         "Upload Resume", 
         type=["pdf", "docx", "txt", "md"]
@@ -89,25 +105,32 @@ with col1:
             st.text(resume_text[:1000] + "\n\n...[truncated for preview]")
 
 with col2:
-    st.subheader("Silo C: Job Description")
+    st.subheader("💼 Silo C: Job Description")
     # Leaving JD as a text area for now, but you could easily replicate the uploader logic here!
     jd_text = st.text_area("Paste Job Description Text", height=200)
 
 st.divider()
 
-if st.button("Run Multi-Agent Evaluation", type="primary"):
+col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+with col_btn2:
+    run_eval = st.button("🚀 Run Multi-Agent Evaluation", type="primary", use_container_width=True)
+
+if run_eval:
     if not resume_text or not jd_text:
         st.error("Please provide both a Resume (upload) and a Job Description (text).")
     else:
         with st.spinner("Orchestrator is coordinating agents..."):
             results = orchestrator.run_evaluation_pipeline(resume_text, jd_text)
             
-            st.subheader("1. HR Agent Extraction")
+            st.subheader("🕵️‍♀️ 1. HR Agent Extraction")
+            st.markdown("*Extracting core technical skills, software experience, and infrastructure knowledge.*")
             st.json(results["hr_extraction"])
             
-            st.subheader("2. Retrieval Agent Context (From Silo A)")
+            st.subheader("🔍 2. Retrieval Agent Context (From Silo A)")
+            st.markdown("*Retrieving specific, relevant technical context from the uploaded documentation.*")
             with st.expander("View Retrieved Technical Documentation"):
                 st.write(results["retrieved_context"])
                 
-            st.subheader("3. Evaluator Agent Final Verdict")
+            st.subheader("⚖️ 3. Evaluator Agent Final Verdict")
+            st.markdown("*Determining if the candidate is capable of operating in the specific environment.*")
             st.json(results["final_evaluation"])
