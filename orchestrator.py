@@ -2,7 +2,7 @@ import json
 import ollama
 from vector_store.chroma_manager import VectorStoreManager
 
-LLM_MODEL = "gemma4:e2b"
+LLM_MODEL = "llama3.1:8b"
 
 class RAGOrchestrator:
     def __init__(self):
@@ -16,7 +16,12 @@ class RAGOrchestrator:
                 {'role': 'system', 'content': system_prompt},
                 {'role': 'user', 'content': user_content}
             ],
-            format='json'
+            format='json',
+            options={
+                'num_ctx': 8192,       # Expand context to comfortably fit RAG chunks
+                'temperature': 0.1,    # Make the agent highly analytical and deterministic
+                'num_predict': 1024    # Cap output to prevent runaway generation
+            }
         )
         try:
             return json.loads(response['message']['content'])
